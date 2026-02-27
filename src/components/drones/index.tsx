@@ -4,8 +4,13 @@ import * as React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ActiveDroneList } from "@/components/drones/ActiveDroneList";
 import { WhitelistedDroneList } from "@/components/drones/WhitelistedDroneList";
+import { GuardianMap } from "@/components/map/GuardianMap";
 
 export function DroneConsole() {
+  const [mapMode, setMapMode] = React.useState<"standard" | "satellite">(
+    "standard"
+  );
+
   return (
     <div className="flex h-full flex-col bg-background text-foreground">
       <header className="flex items-center justify-between border-b border-sidebar-border px-6 py-4">
@@ -15,13 +20,38 @@ export function DroneConsole() {
             Live airspace overview and active drones.
           </p>
         </div>
-        <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-          Connected
-        </span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 rounded-full bg-background/10 p-1 text-[11px] font-medium">
+            <button
+              type="button"
+              onClick={() => setMapMode("standard")}
+              className={`rounded-full px-3 py-1 transition-colors ${
+                mapMode === "standard"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-background/40"
+              }`}
+            >
+              Standard
+            </button>
+            <button
+              type="button"
+              onClick={() => setMapMode("satellite")}
+              className={`rounded-full px-3 py-1 transition-colors ${
+                mapMode === "satellite"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-background/40"
+              }`}
+            >
+              Satellite
+            </button>
+          </div>
+          <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+            Connected
+          </span>
+        </div>
       </header>
 
       <main className="flex flex-1">
-        {/* Left side: Active / Whitelisted tabs */}
         <section className="hidden w-96 border-r border-sidebar-border bg-sidebar/80 p-4 lg:flex lg:flex-col">
           <Tabs defaultValue="active" className="w-full">
             <TabsList className="mb-3 inline-flex h-9 w-full items-center justify-start rounded-lg bg-background/10 p-1 text-xs font-medium">
@@ -49,16 +79,13 @@ export function DroneConsole() {
           </Tabs>
         </section>
 
-        {/* Map area */}
-        <section className="flex-1 bg-black">
-          <iframe
-            title="Guardian RF Map"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=-77.200%2C38.80%2C-76.90%2C39.00&layer=mapnik"
-            className="h-full w-full border-0"
-          />
+        <section className="relative flex-1 bg-black">
+          <div className="pointer-events-none absolute right-4 top-4 z-10 rounded-full bg-zinc-900/70 px-3 py-1 text-[11px] font-medium text-emerald-100">
+            {mapMode === "standard" ? "Standard View" : "Satellite View"}
+          </div>
+          <GuardianMap mode={mapMode} />
         </section>
       </main>
     </div>
   );
 }
-
