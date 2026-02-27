@@ -68,11 +68,11 @@ export function NavUser({
   // Truncate email for display
   const displayEmail = truncateEmail(user.email, 20)
   
-  // Theme-dependent styles following the dashboard pattern
-  const hoverBg = currentTheme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-  const cardBg = currentTheme === 'dark' ? 'bg-gray-900' : 'bg-white'
-  const activeBg = currentTheme === 'dark' ? 'data-[state=open]:bg-gray-800' : 'data-[state=open]:bg-gray-100'
-  const dropdownHoverBg = currentTheme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
+  // Theme-dependent styles using green Guardian RF palette
+  const hoverBg = 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+  const cardBg = 'bg-sidebar'
+  const activeBg = 'data-[state=open]:bg-sidebar-accent'
+  const dropdownHoverBg = 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
 
   // Close sidebar on mobile when navigating
   const closeSidebarIfMobile = () => {
@@ -124,7 +124,7 @@ export function NavUser({
             >
               <Avatar className="h-9 w-9 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
+                <AvatarFallback className="rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 text-white font-semibold">
                   {user.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
@@ -148,7 +148,7 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
+                  <AvatarFallback className="rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 text-white font-semibold">
                     {user.name.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>

@@ -3,14 +3,12 @@
 import * as React from "react"
 import Image from "next/image"
 import {
-  IconDashboard,
-  IconDatabase,
-  IconKey,
-  IconSparkles,
-  IconBook,
+  IconDrone,
+  IconRadar,
+  IconShield,
+  IconHistory,
 } from "@tabler/icons-react"
 import { PanelLeft, PanelLeftClose } from "lucide-react"
-import { useTheme } from "next-themes"
 
 import {
   Sidebar,
@@ -30,30 +28,24 @@ import { NavUser } from "@/components/ui/nav-user"
 const data = {
   navMain: [
     {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: IconDashboard,
+      title: "Drones",
+      url: "/drones",
+      icon: IconDrone,
     },
     {
-      title: "Namespaces",
-      url: "/namespaces",
-      icon: IconDatabase,
+      title: "Radar",
+      url: "/radar",
+      icon: IconRadar,
     },
     {
-      title: "API Keys",
-      url: "/api-keys",
-      icon: IconKey,
+      title: "Shield",
+      url: "/shield",
+      icon: IconShield,
     },
     {
-      title: "Playground",
-      url: "/playground",
-      icon: IconSparkles,
-    },
-    {
-      title: "Documentation",
-      url: "https://docs.moorcheh.ai",
-      icon: IconBook,
-      external: true,
+      title: "History",
+      url: "/history",
+      icon: IconHistory,
     },
   ],
   navSecondary: [],
@@ -61,18 +53,14 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { toggleSidebar } = useSidebar()
-  const { theme, systemTheme } = useTheme()
 
-  
-  // Determine the effective theme
-  const currentTheme = theme === 'system' ? systemTheme : theme
-  
-  // Theme-dependent styles following the dashboard pattern
-  const textColor = currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
-  const mutedTextColor = currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-  const hoverBg = currentTheme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-  const sidebarBg = currentTheme === 'dark' ? 'bg-gray-950' : 'bg-white'
-  const borderColor = currentTheme === 'dark' ? 'border-gray-800' : 'border-gray-200'
+  // Theme-dependent styles using token-based Guardian RF palette;
+  // actual colors come from CSS variables that the theme toggler updates.
+  const textColor = "text-sidebar-foreground"
+  const mutedTextColor = "text-sidebar-foreground/70"
+  const hoverBg = "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+  const sidebarBg = "bg-sidebar"
+  const borderColor = "border-sidebar-border"
 
   return (
     <Sidebar side="left" variant="sidebar" collapsible="icon" {...props} className={`${sidebarBg} ${textColor} ${borderColor} border-r`}>
@@ -82,10 +70,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <div className="flex items-center w-full justify-between">
               <SidebarMenuButton
                 asChild
-                className="data-[slot=sidebar-menu-button]:!p-0 flex-1 hover:bg-transparent"
+                className="data-[slot=sidebar-menu-button]:p-0! flex-1 hover:bg-transparent"
               >
                 <a onClick={() => toggleSidebar()} className="flex items-center gap-3 min-w-0">
-                  <div className="group/logo relative flex-shrink-0 w-8 h-8 -ml-2">
+                  <div className="group/logo relative shrink-0 w-8 h-8 -ml-2">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center">
                       <Image
                         src="/image.png"

@@ -3,7 +3,6 @@
 import { type Icon } from "@tabler/icons-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useTheme } from "next-themes"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -32,17 +31,12 @@ export function NavMain({
   }[]
 }) {
   const pathname = usePathname()
-  const { theme, systemTheme } = useTheme()
   const { isMobile, setOpenMobile } = useSidebar()
-  
-  // Determine the effective theme
-  const currentTheme = theme === 'system' ? systemTheme : theme
-  
-  // Theme-dependent styles following the dashboard pattern
-  const hoverBg = currentTheme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-  const activeBg = currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-  const activeTextColor = currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
-  const activeBorderColor = currentTheme === 'dark' ? 'border-blue-500' : 'border-blue-600'
+  // Use token-based Guardian RF palette so theme toggle changes colors via CSS vars
+  const hoverBg = "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+  const activeBg = "bg-sidebar-accent"
+  const activeTextColor = "text-sidebar-accent-foreground"
+  const activeBorderColor = "border-sidebar-primary"
 
   // Close sidebar on mobile when a link is clicked
   const handleLinkClick = () => {
@@ -53,24 +47,24 @@ export function NavMain({
 
   return (
     <SidebarGroup>
-      <SidebarGroupContent className="space-y-1">
-        <SidebarMenu>
+      <SidebarGroupContent className="space-y-3">
+        <SidebarMenu className="gap-3">
           {items.map((item) => {
             const isActive = isActivePath(item.url, pathname)
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton 
-                  asChild 
+                <SidebarMenuButton
+                  asChild
                   tooltip={item.title}
-                  className={`${isActive ? activeBg : hoverBg} rounded-lg transition-colors duration-200 px-3 py-2.5 relative ${
+                  className={`${isActive ? activeBg : hoverBg} rounded-xl transition-colors duration-200 px-5 py-4 relative ${
                     isActive ? 'border-l-2 ' + activeBorderColor : ''
                   }`}
                 >
-                  <Link href={item.url} onClick={handleLinkClick} className="flex items-center gap-3">
+                  <Link href={item.url} onClick={handleLinkClick} className="flex items-center gap-4">
                     {item.icon && (
-                      <item.icon className={`h-5 w-5 ${isActive ? activeTextColor : ''}`} />
+                      <item.icon className={`h-10 w-10 ${isActive ? activeTextColor : ''}`} />
                     )}
-                    <span className={`font-medium group-data-[collapsible=icon]:hidden ${isActive ? activeTextColor : ''}`}>
+                    <span className={`font-semibold text-base group-data-[collapsible=icon]:hidden ${isActive ? activeTextColor : ''}`}>
                       {item.title}
                     </span>
                   </Link>

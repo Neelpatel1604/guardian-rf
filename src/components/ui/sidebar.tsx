@@ -70,21 +70,43 @@ const SidebarProvider = React.forwardRef<
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
 
-    // This is the internal state of the sidebar.
-    // We use openProp and setOpenProp for control from outside the component.
-    const [_open, _setOpen] = React.useState(defaultOpen)
-    const open = openProp ?? _open
+    // Internal state for the sidebar. If uncontrolled, hydrate initial state
+    // from a cookie so collapsed/expanded persists across navigations.
+    const [internalOpen, setInternalOpen] = React.useState<boolean>(() => {
+      if (openProp !== undefined) {
+        return openProp
+      }
+      if (typeof document === "undefined") {
+        return defaultOpen
+      }
+      const match = document.cookie.match(
+        new RegExp(`${SIDEBAR_COOKIE_NAME}=(true|false)`)
+      )
+      if (match) {
+        return match[1] === "true"
+      }
+      return defaultOpen
+    })
+
+    const open = openProp ?? internalOpen
+
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
-        const openState = typeof value === "function" ? value(open) : value
         if (setOpenProp) {
-          setOpenProp(openState)
+          const next =
+            typeof value === "function" ? value(open) : (value as boolean)
+          setOpenProp(next)
         } else {
-          _setOpen(openState)
+          setInternalOpen((prev) => {
+            const next =
+              typeof value === "function" ? value(prev) : (value as boolean)
+            // Persist to cookie so state survives full reloads / new routes.
+            if (typeof document !== "undefined") {
+              document.cookie = `${SIDEBAR_COOKIE_NAME}=${next}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+            }
+            return next
+          })
         }
-
-        // This sets the cookie to keep the sidebar state.
-        document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
       },
       [setOpenProp, open]
     )
