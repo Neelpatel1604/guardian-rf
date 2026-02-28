@@ -82,7 +82,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <div className="group/logo relative shrink-0 w-8 h-8 -ml-2">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center">
                       <Image
-                        src="/image.png"
+                        src="/logo.png"
                         alt="Guardian RF"
                         width={32}
                         height={32}
@@ -128,7 +128,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           user={{
             name: "Guardian Operator",
             email: "operator@guardianrf.app",
-            avatar: "/avatars/user.jpg",
           }}
         />
       </SidebarFooter>
