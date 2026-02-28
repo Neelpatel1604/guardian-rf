@@ -5,8 +5,8 @@ import Image from "next/image"
 import {
   IconDrone,
   IconRadar,
-  IconShield,
   IconHistory,
+  IconShieldCheck,
 } from "@tabler/icons-react"
 import { PanelLeft, PanelLeftClose } from "lucide-react"
 
@@ -38,9 +38,9 @@ const data = {
       icon: IconRadar,
     },
     {
-      title: "Shield",
-      url: "/shield",
-      icon: IconShield,
+      title: "Geofences",
+      url: "/geofences",
+      icon: IconShieldCheck,
     },
     {
       title: "History",
