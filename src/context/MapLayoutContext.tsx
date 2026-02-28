@@ -5,6 +5,18 @@ import type { Geofence } from "@/data/geofences";
 import { polygonAreaSqKm } from "@/data/geofences";
 import type { LatLngTuple } from "leaflet";
 
+const SEED_GEOFENCE: Geofence = {
+  id: "gf-demo",
+  name: "Geofence #1",
+  points: [
+    [38.908, -77.048],
+    [38.908, -77.038],
+    [38.915, -77.038],
+    [38.915, -77.048],
+  ],
+  areaSqKm: 0.11,
+};
+
 type MapLayoutContextValue = {
   geofences: Geofence[];
   setGeofences: React.Dispatch<React.SetStateAction<Geofence[]>>;
@@ -24,7 +36,7 @@ export function useMapLayout() {
 }
 
 export function MapLayoutProvider({ children }: { children: React.ReactNode }) {
-  const [geofences, setGeofences] = React.useState<Geofence[]>([]);
+  const [geofences, setGeofences] = React.useState<Geofence[]>([SEED_GEOFENCE]);
   const [isCreating, setIsCreating] = React.useState(false);
   const [focusedGeofenceId, setFocusedGeofenceId] = React.useState<string | null>(null);
 

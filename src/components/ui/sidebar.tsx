@@ -70,23 +70,21 @@ const SidebarProvider = React.forwardRef<
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
 
-    // Internal state for the sidebar. If uncontrolled, hydrate initial state
-    // from a cookie so collapsed/expanded persists across navigations.
-    const [internalOpen, setInternalOpen] = React.useState<boolean>(() => {
-      if (openProp !== undefined) {
-        return openProp
-      }
-      if (typeof document === "undefined") {
-        return defaultOpen
-      }
+    // Internal state for the sidebar. Use defaultOpen for initial render to avoid
+    // hydration mismatch (server has no cookie). Sync from cookie after mount.
+    const [internalOpen, setInternalOpen] = React.useState<boolean>(
+      openProp ?? defaultOpen
+    )
+
+    React.useEffect(() => {
+      if (openProp !== undefined) return
       const match = document.cookie.match(
         new RegExp(`${SIDEBAR_COOKIE_NAME}=(true|false)`)
       )
       if (match) {
-        return match[1] === "true"
+        setInternalOpen(match[1] === "true")
       }
-      return defaultOpen
-    })
+    }, [openProp])
 
     const open = openProp ?? internalOpen
 

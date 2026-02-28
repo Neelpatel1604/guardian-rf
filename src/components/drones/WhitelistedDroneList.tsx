@@ -1,11 +1,19 @@
 "use client";
 
-import { whitelistedDrones } from "@/data/drones";
+import { whitelistedDrones, activeDrones } from "@/data/drones";
+import { useDrones } from "@/context/DronesContext";
 
 export function WhitelistedDroneList() {
+  const { whitelistedIds } = useDrones();
+  const fromData = whitelistedDrones;
+  const fromActive = activeDrones.filter(
+    (d) => whitelistedIds.has(d.id) && !whitelistedDrones.some((w) => w.id === d.id)
+  );
+  const allWhitelisted = [...fromData, ...fromActive];
+
   return (
     <div className="space-y-4">
-      {whitelistedDrones.map((drone) => (
+      {allWhitelisted.map((drone) => (
         <article
           key={drone.id}
           className="rounded-2xl border border-emerald-500/50 bg-black/60 p-3 text-xs text-emerald-100 shadow-[0_0_0_1px_rgba(56,189,248,0.25),0_10px_30px_rgba(0,0,0,0.8)]"

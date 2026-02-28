@@ -2,15 +2,25 @@
 
 import { activeDrones, type DroneSession } from "@/data/drones";
 import { InfoStat } from "@/components/drones/InfoStat";
+import { useDrones } from "@/context/DronesContext";
+import { useMapFocus } from "@/context/MapFocusContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { IconDotsVertical, IconShieldCheck } from "@tabler/icons-react";
 
-type ActiveDroneListProps = {
-  onFocusDrone?: (drone: DroneSession) => void;
-};
+export function ActiveDroneList() {
+  const mapFocus = useMapFocus();
+  const { isWhitelisted, whitelistDrone } = useDrones();
+  const dronesToShow = activeDrones.filter((d) => !isWhitelisted(d.id));
 
-export function ActiveDroneList({ onFocusDrone }: ActiveDroneListProps) {
   return (
     <div className="space-y-4">
-      {activeDrones.map((drone) => (
+      {dronesToShow.map((drone) => (
         <article
           key={drone.id}
           className="rounded-2xl border border-primary/70 bg-black/60 p-3 text-xs text-emerald-100 shadow-[0_0_0_1px_rgba(16,185,129,0.25),0_10px_30px_rgba(0,0,0,0.8)]"
@@ -19,9 +29,31 @@ export function ActiveDroneList({ onFocusDrone }: ActiveDroneListProps) {
             <div className="truncate text-[11px] font-mono text-emerald-200/90">
               {drone.id}
             </div>
-            <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
-              Active
-            </span>
+            <div className="flex items-center gap-1">
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
+                Active
+              </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 shrink-0 rounded-full text-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200"
+                  >
+                    <IconDotsVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-700">
+                  <DropdownMenuItem
+                    onClick={() => whitelistDrone(drone.id)}
+                    className="text-emerald-200 focus:bg-emerald-500/20 focus:text-emerald-100"
+                  >
+                    <IconShieldCheck className="mr-2 h-4 w-4" />
+                    Whitelist
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </header>
 
           <div className="mb-3 inline-flex max-w-full items-center gap-2 rounded-full bg-emerald-500/20 px-2 py-1 text-[11px] text-emerald-100">
@@ -35,7 +67,7 @@ export function ActiveDroneList({ onFocusDrone }: ActiveDroneListProps) {
               <button
                 type="button"
                 className="rounded-full border border-emerald-500/60 px-2 py-0.5 text-[10px] font-medium text-emerald-100 hover:bg-emerald-500/20"
-                onClick={() => onFocusDrone?.(drone)}
+                onClick={() => mapFocus?.focusDrone(drone)}
               >
                 Focus
               </button>
@@ -57,6 +89,7 @@ export function ActiveDroneList({ onFocusDrone }: ActiveDroneListProps) {
               <button
                 type="button"
                 className="rounded-full border border-emerald-500/60 px-2 py-0.5 text-[10px] font-medium text-emerald-100 hover:bg-emerald-500/20"
+                onClick={() => mapFocus?.focusOperator(drone)}
               >
                 Focus
               </button>

@@ -14,9 +14,7 @@ import {
 
 // Helper function to check if a path is active (including subpaths)
 function isActivePath(path: string, pathname: string) {
-  if (path === '/' && pathname === '/') {
-    return true
-  }
+  if (path === "/") return pathname === "/"
   return pathname.startsWith(path)
 }
 
@@ -34,9 +32,9 @@ export function NavMain({
   const { isMobile, setOpenMobile } = useSidebar()
   // Use token-based Guardian RF palette so theme toggle changes colors via CSS vars
   const hoverBg = "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-  const activeBg = "bg-sidebar-accent"
-  const activeTextColor = "text-sidebar-accent-foreground"
-  const activeBorderColor = "border-sidebar-primary"
+  const activeBg = "bg-primary/15"
+  const activeTextColor = "text-primary font-semibold"
+  const activeIndicator = "before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-8 before:rounded-full before:bg-primary"
 
   // Close sidebar on mobile when a link is clicked
   const handleLinkClick = () => {
@@ -56,15 +54,15 @@ export function NavMain({
                 <SidebarMenuButton
                   asChild
                   tooltip={item.title}
-                  className={`${isActive ? activeBg : hoverBg} rounded-xl transition-colors duration-200 px-5 py-4 relative ${
-                    isActive ? 'border-l-2 ' + activeBorderColor : ''
+                  className={`${isActive ? activeBg : hoverBg} rounded-lg transition-all duration-200 px-3 py-2.5 pl-4 group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 group-data-[collapsible=icon]:!flex group-data-[collapsible=icon]:!items-center group-data-[collapsible=icon]:!justify-center ${
+                    isActive ? `relative ${activeIndicator}` : ''
                   }`}
                 >
-                  <Link href={item.url} onClick={handleLinkClick} className="flex items-center gap-4">
+                  <Link href={item.url} onClick={handleLinkClick} className="flex items-center gap-3">
                     {item.icon && (
-                      <item.icon className={`h-10 w-10 ${isActive ? activeTextColor : ''}`} />
+                      <item.icon className={`!h-7 !w-7 shrink-0 group-data-[collapsible=icon]:!h-5 group-data-[collapsible=icon]:!w-5 ${isActive ? activeTextColor : ''}`} />
                     )}
-                    <span className={`font-semibold text-base group-data-[collapsible=icon]:hidden ${isActive ? activeTextColor : ''}`}>
+                    <span className={`font-medium text-sm group-data-[collapsible=icon]:hidden ${isActive ? activeTextColor : ''}`}>
                       {item.title}
                     </span>
                   </Link>

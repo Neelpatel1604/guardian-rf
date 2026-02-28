@@ -3,6 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import {
+  IconHome,
   IconDrone,
   IconRadar,
   IconHistory,
@@ -27,6 +28,11 @@ import { NavUser } from "@/components/ui/nav-user"
 
 const data = {
   navMain: [
+    {
+      title: "Home",
+      url: "/",
+      icon: IconHome,
+    },
     {
       title: "Drones",
       url: "/drones",
