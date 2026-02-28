@@ -1,3 +1,7 @@
+import Link from "next/link"
+
+import { Button } from "@/components/ui/button"
+
 export default function Home() {
   return (
     <div className="flex min-h-[calc(100vh-2rem)] flex-col items-center justify-center p-8">
@@ -8,6 +12,9 @@ export default function Home() {
         <p className="max-w-md text-lg text-muted-foreground">
           Guardian RF — Drone monitoring and geofence management platform.
         </p>
+        <Button asChild size="lg">
+          <Link href="/drones">Go to Drones</Link>
+        </Button>
       </main>
     </div>
   )
